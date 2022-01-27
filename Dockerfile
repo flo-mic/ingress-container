@@ -12,4 +12,4 @@ RUN apk update && \
 
 COPY docker_start.sh /docker_start.sh
 
-ENTRYPOINT [ "docker_start.sh" ]
+ENTRYPOINT [ "sh docker_start.sh" ]

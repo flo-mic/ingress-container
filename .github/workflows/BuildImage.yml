@@ -1,5 +1,5 @@
 # This Workflow will build a docker ocntainer an dpublis it on the github container registry
-name: Build image and deploy to contaienr registry
+name: Build image and deploy to container registry
 
 on:
   # Run on each commit to main branch
