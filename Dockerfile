@@ -11,5 +11,6 @@ RUN apk update && \
     mv coreruleset/crs-setup.conf.example coreruleset/crs-setup.conf
 
 COPY docker_start.sh /docker_start.sh
+COPY nginx-modsecurity.conf nginx-modsecurity.conf
 
 ENTRYPOINT [ "sh docker_start.sh" ]
