@@ -3,7 +3,7 @@ FROM alpine:latest
 ARG OWASP_VERSION=v3.4/dev
 
 RUN apk update && \
-    apk install -< \
+    apk add --no-cache --upgrade \
         curl \
         git \
         openssl && \
