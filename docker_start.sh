@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # Configure antivirus plugin
-if [[ -v "${CLAMAV_ADDRESS}" ]]; then
+if [[ -n "${CLAMAV_ADDRESS}" ]]; then
     if [[ -z "${CLAMAV_PORT}" ]]; then
         CLAMAV_PORT=3310
     fi
