@@ -9,13 +9,11 @@ if [[ -n "${CLAMAV_ADDRESS}" ]]; then
     sed -i "s/plugin_clamav_address=127.0.0.1/plugin_clamav_address=${CLAMAV_ADDRESS}/g" antivirus-plugin/plugins/antivirus-config.conf
     sed -i "s/plugin_clamav_address=127.0.0.1/plugin_clamav_address=${CLAMAV_PORT}/g" antivirus-plugin/plugins/antivirus-config.conf
     mv antivirus-plugin/plugins/* coreruleset/plugins/
-    cp coreruleset/nginx-modsecurity-plugins.conf coreruleset/nginx-modsecurity.conf
 fi
 
 # Configure fakebot google plugin
 if [[ "${FAKEBOT_PLUGIN_ENNABLED}" = "true" ]]; then
     mv fake-bot-plugin/plugins/* coreruleset/plugins/
-    cp coreruleset/nginx-modsecurity-plugins.conf coreruleset/nginx-modsecurity.conf
 fi
 
 # Copy files to destination
