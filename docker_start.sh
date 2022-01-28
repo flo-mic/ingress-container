@@ -18,30 +18,25 @@ if [[ "${FAKEBOT_PLUGIN_ENNABLED}" = "true" ]]; then
     cp coreruleset/nginx-modsecurity-plugins.conf coreruleset/nginx-modsecurity.conf
 fi
 
+# Copy files to destination
+cp -r coreruleset/* /etc/nginx/owasp-modsecurity-crs/
 
 # Build nginx configuration file
 # Add crs-setup file
-echo "Include /etc/nginx/owasp-modsecurity-crs/crs-setup.conf" > coreruleset/nginx-modsecurity.conf
+echo "Include /etc/nginx/owasp-modsecurity-crs/crs-setup.conf" > /etc/nginx/owasp-modsecurity-crs/nginx-modsecurity.conf
 # Add plugin conf files if present
-if [[ $(find coreruleset/plugins -name '*-before.conf' | wc -l) != 0  ]]; then
-    echo "Include /etc/nginx/owasp-modsecurity-crs/plugins/*-config.conf" >> coreruleset/nginx-modsecurity.conf
-fi
+for line in $(find /etc/nginx/owasp-modsecurity-crs/plugins -name '*-config.conf'); do 
+     echo "Include $line" >> /etc/nginx/owasp-modsecurity-crs/nginx-modsecurity.conf
+done
 # Add plugin *-before.conf files if present
-if [[ $(find coreruleset/plugins -name '*-before.conf' | wc -l) != 0  ]]; then
-    echo "Include /etc/nginx/owasp-modsecurity-crs/plugins/*-before.conf" >> coreruleset/nginx-modsecurity.conf
-fi
-# Add core rule set rules
-echo "Include /etc/nginx/owasp-modsecurity-crs/rules/*.conf" >> coreruleset/nginx-modsecurity.conf
+for line in $(find /etc/nginx/owasp-modsecurity-crs/plugins -name '*-before.conf'); do 
+     echo "Include $line" >> /etc/nginx/owasp-modsecurity-crs/nginx-modsecurity.conf
+done
+# Add All CRS Rules if present
+for line in $(find /etc/nginx/owasp-modsecurity-crs/rules -name '*.conf'); do 
+     echo "Include $line" >> /etc/nginx/owasp-modsecurity-crs/nginx-modsecurity.conf
+done
 # Add plugin *-before.conf files if present
-if [[ $(find coreruleset/plugins -name '*-before.conf' | wc -l) != 0  ]]; then
-    echo "Include /etc/nginx/owasp-modsecurity-crs/plugins/*-after.conf" >> coreruleset/nginx-modsecurity.conf
-fi
-
-# Copy files to destination
-rm -f coreruleset/nginx-modsecurity-plugins.conf
-cp -r coreruleset/* /etc/nginx/owasp-modsecurity-crs/
-
-
-
-
-    
+for line in $(find /etc/nginx/owasp-modsecurity-crs/plugins -name '*-after.conf'); do 
+     echo "Include $line" >> /etc/nginx/owasp-modsecurity-crs/nginx-modsecurity.conf
+done
