@@ -28,13 +28,13 @@ if [[ $(find coreruleset/plugins -name '*-before.conf' | wc -l) != 0  ]]; then
 fi
 # Add plugin *-before.conf files if present
 if [[ $(find coreruleset/plugins -name '*-before.conf' | wc -l) != 0  ]]; then
-    echo "Include modsecurity.d/owasp-modsecurity-crs/plugins/*-before.conf" >> coreruleset/nginx-modsecurity.conf
+    echo "Include /etc/nginx/owasp-modsecurity-crs/plugins/*-before.conf" >> coreruleset/nginx-modsecurity.conf
 fi
 # Add core rule set rules
 echo "Include /etc/nginx/owasp-modsecurity-crs/rules/*.conf" >> coreruleset/nginx-modsecurity.conf
 # Add plugin *-before.conf files if present
 if [[ $(find coreruleset/plugins -name '*-before.conf' | wc -l) != 0  ]]; then
-    echo "Include modsecurity.d/owasp-modsecurity-crs/plugins/*-after.conf" >> coreruleset/nginx-modsecurity.conf
+    echo "Include /etc/nginx/owasp-modsecurity-crs/plugins/*-after.conf" >> coreruleset/nginx-modsecurity.conf
 fi
 
 # Copy files to destination
