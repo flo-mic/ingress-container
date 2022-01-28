@@ -43,10 +43,10 @@ fi
 # Configure auto-decoding plugin
 if [[ "${AUTO_DECODING_PLUGIN_ENABLED}" = "true" ]]; then
     if [[ -n "${AUTO_DECODING_DOUBLE_DECODING_ENABLED}" ]]; then
-        sed -i "s/#SecAction/#SecAction/g" body-decompress-plugin/plugins/body-decompress-config.conf
-        sed -i "s/#    /    /g" body-decompress-plugin/plugins/body-decompress-config.conf
+        sed -i "s/#SecAction/#SecAction/g" auto-decoding-plugin/plugins/generic-transformations-config-before.conf
+        sed -i "s/#    /    /g" auto-decoding-plugin/plugins/generic-transformations-config-before.conf
     fi
-    mv body-decompress-plugin/plugins/* coreruleset/plugins/
+    mv auto-decoding-plugin/plugins/* coreruleset/plugins/
 fi
 
 # Copy files to destination

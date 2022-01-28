@@ -15,7 +15,7 @@ RUN apk update && \
     git clone https://github.com/coreruleset/fake-bot-plugin && \
     git clone https://github.com/coreruleset/incubator-plugin && \
     git clone https://github.com/coreruleset/body-decompress-plugin && \
-    mv body-decompress-plugin/body-decompress-config.conf.example body-decompress-plugin/body-decompress-config.conf && \
+    mv body-decompress-plugin/plugins/body-decompress-config.conf.example body-decompress-plugin/plugins/body-decompress-config.conf && \
     git clone https://github.com/coreruleset/auto-decoding-plugin && \
     # Start cleanup
     apk del --purge build-dependencies && \
