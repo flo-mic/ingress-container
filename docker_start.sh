@@ -18,6 +18,25 @@ if [[ "${FAKEBOT_PLUGIN_ENNABLED}" = "true" ]]; then
     cp coreruleset/nginx-modsecurity-plugins.conf coreruleset/nginx-modsecurity.conf
 fi
 
+
+# Build nginx configuration file
+# Add crs-setup file
+echo "Include /etc/nginx/owasp-modsecurity-crs/crs-setup.conf" > coreruleset/nginx-modsecurity.conf
+# Add plugin conf files if present
+if [[ $(ls -1 coreruleset/plugins/*-config.conf | wc -w) > 0  ]]; then
+    echo "/etc/nginx/owasp-modsecurity-crs/plugins/*-config.conf" >> coreruleset/nginx-modsecurity.conf
+fi
+# Add plugin *-before.conf files if present
+if [[ $(ls -1 coreruleset/plugins/*-before.conf | wc -w) > 0  ]]; then
+    echo "Include modsecurity.d/owasp-modsecurity-crs/plugins/*-before.conf" >> coreruleset/nginx-modsecurity.conf
+fi
+# Add core rule set rules
+echo "Include /etc/nginx/owasp-modsecurity-crs/rules/*.conf" >> coreruleset/nginx-modsecurity.conf
+# Add plugin *-before.conf files if present
+if [[ $(ls -1 coreruleset/plugins/*-after.conf | wc -w) > 0  ]]; then
+    echo "Include modsecurity.d/owasp-modsecurity-crs/plugins/*-after.conf" >> coreruleset/nginx-modsecurity.conf
+fi
+
 # Copy files to destination
 rm -f coreruleset/nginx-modsecurity-plugins.conf
 cp -r coreruleset/* /etc/nginx/owasp-modsecurity-crs/
