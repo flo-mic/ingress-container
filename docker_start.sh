@@ -12,7 +12,7 @@ if [[ -z "${CLAMAV_ADDRESS}" ]]; then
 fi
 
 # Configure fakebot google plugin
-if [[ ${FAKEBOT_PLUGIN_ENNABLED} = "true" ]]; then
+if [[ "${FAKEBOT_PLUGIN_ENNABLED}" = "true" ]]; then
     mv fake-bot-plugin/plugins/* /coreruleset/plugins/
 fi
 
