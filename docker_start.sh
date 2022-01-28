@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # Configure antivirus plugin
-if [[ -z "${CLAMAV_ADDRESS}"]]; then
+if [[ -z "${CLAMAV_ADDRESS}" ]]; then
     if [[ -z "${CLAMAV_PORT}" ]]; then
         CLAMAV_PORT=3310
     fi
@@ -12,12 +12,12 @@ if [[ -z "${CLAMAV_ADDRESS}"]]; then
 fi
 
 # Configure fakebot google plugin
-if [[ ${FAKEBOT_PLUGIN_ENNABLED} = "true"]]; then
+if [[ ${FAKEBOT_PLUGIN_ENNABLED} = "true" ]]; then
     mv fake-bot-plugin/plugins/* /coreruleset/plugins/
 fi
 
+# Copy files to destination
 cp -r coreruleset/* /etc/nginx/owasp-modsecurity-crs/
-#cp modsecurity.conf /etc/nginx/modsecurity/modsecurity.conf
 
 
 

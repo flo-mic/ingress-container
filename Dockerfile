@@ -23,6 +23,5 @@ RUN apk update && \
 
 COPY docker_start.sh /docker_start.sh
 COPY nginx-modsecurity.conf coreruleset/nginx-modsecurity.conf
-COPY modsecurity.conf modsecurity.conf
 
 ENTRYPOINT [ "/docker_start.sh" ]
