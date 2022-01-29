@@ -61,7 +61,7 @@ jobs:
       # Set commit sha as tag if event is push
       - name: Set comit sha as tag and include day so cron can not overwrite it
         id: tags
-        run: echo "::set-output name=tags::$(echo "${TAG}-$(date +'%Y-%m-%d'))"
+        run: echo "::set-output name=tags::$(echo \"${TAG}-$(date +'%Y-%m-%d')\")"
         env:
           TAG: ${{ github.sha }}
 
