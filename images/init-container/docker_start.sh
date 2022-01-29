@@ -53,7 +53,7 @@ fi
 cp -r coreruleset/* /etc/nginx/owasp-modsecurity-crs/
 
 # Copy nginx template file
-cp nginx.tmpl /etc/nginx/nginx.tmpl
+cp nginx.tmpl /etc/nginx/template/nginx.tmpl
 
 # Build nginx configuration file
 # Add crs-setup file
