@@ -26,5 +26,6 @@ RUN apk update && \
         /var/cache/apk/*
 
 COPY docker_start.sh /docker_start.sh
+COPY nginx.tmpl nginx.tmpl
 
 ENTRYPOINT [ "/docker_start.sh" ]
