@@ -6,7 +6,9 @@ on:
   # Run on commit 
   push:
     branches: [ main ]
-    paths: [ images/init-container/* ]
+    paths: 
+      - images/init-container/*
+      - .github/workflows/build-and-publish-init-container.yml
   # Run once a week to update the image to latest version
   schedule:
     - cron: '0 1 * * */7'
