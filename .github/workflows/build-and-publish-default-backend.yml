@@ -36,35 +36,33 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
       
+      # Define tags for image
+      - name: Get tags to use for the image
+        id: tags
+        run: |
+          if [[ "${{ github.event_name }}" = "schedule" ]] || [[ "${{ github.event_name }}" = "workflow_dispatch" ]]; then
+            # Set tag with commit and time in case of cron or on demand run
+            echo "::set-output name=tag::$(${{ github.sha }}-$(date +'%Y-%m-%d'))"  
+          else
+            echo "::set-output name=tag::$(${{ github.sha }})"
+          fi
+      
       - name: Build image
+        id: build
         run: |
           cd images/default-backend
-          docker build --no-cache --build-arg RUNS_ON_GITHUB=true -t ${{ github.sha }} .
+          docker build --no-cache --build-arg RUNS_ON_GITHUB=true -t ${{ ${{ github.sha }} }} .
 
-      # Set commit sha as tag if event is push
-      - name: Set comit sha as tag and include day so cron can not overwrite it
-        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
-        id: date
-        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"        
-
+      
       - name: Tag image
         if: github.event_name != 'pull_request'
+        id: tag
         run: |
-          echo "${{ steps.date.outputs.date }}"
-          echo "${{ github.sha }}"
-
+          # Set default tags
           docker tag ${{ github.sha }} ${IMAGE_NAME}:${VERSION}
-          docker tag ${{ github.sha }} ${IMAGE_NAME}:${VERSION}-${{ github.sha }}
+          docker tag ${{ github.sha }} ${IMAGE_NAME}:${{ steps.tags.outputs.tag }}
           docker tag ${{ github.sha }} ${REGISTRY}/${IMAGE_NAME}:${VERSION}
-          docker tag ${{ github.sha }} ${REGISTRY}/${IMAGE_NAME}:${VERSION}-${{ github.sha }}
-
-      - name: Tag image
-        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
-        run: |
-          docker tag ${{ github.sha }} ${IMAGE_NAME}:${VERSION}
-          docker tag ${{ github.sha }} ${IMAGE_NAME}:${VERSION}-${{ github.sha }}-${{ steps.date.outputs.date }}
-          docker tag ${{ github.sha }} ${REGISTRY}/${IMAGE_NAME}:${VERSION}
-          docker tag ${{ github.sha }} ${REGISTRY}/${IMAGE_NAME}:${VERSION}-${{ github.sha }}-${{ steps.date.outputs.date }}
+          docker tag ${{ github.sha }} ${REGISTRY}/${IMAGE_NAME}:${{ steps.tags.outputs.tag }}
 
       - name: Login to GitHub Container Registry
         if: github.event_name != 'pull_request'
@@ -76,5 +74,5 @@ jobs:
         if: github.event_name != 'pull_request'
         id: push
         run: |
-          docker push ${REGISTRY}/${IMAGE_NAME}:${VERSION}-${{ github.sha }}
           docker push ${REGISTRY}/${IMAGE_NAME}:${VERSION}
+          docker push ${REGISTRY}/${IMAGE_NAME}:${{ steps.tags.outputs.tag }}
