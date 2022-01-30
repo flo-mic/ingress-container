@@ -12,6 +12,9 @@ on:
   # Run once a week to update the image to latest version
   schedule:
     - cron: '0 1 * * */7'
+  # Allow run on pull request
+  pull_request:
+    branches: [ main ]
   # Allow run on demand
   workflow_dispatch:
 
