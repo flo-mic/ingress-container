@@ -22,7 +22,8 @@ env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}-default-backend
   VERSION: "latest"
-  
+  WORKDIR: "images/default-backend"
+
 jobs:
   build:
 
@@ -53,7 +54,7 @@ jobs:
       - name: Build image
         id: build
         run: |
-          cd images/default-backend
+          cd ${WORKDIR}
           docker build --no-cache --build-arg RUNS_ON_GITHUB=true -t ${{ github.sha }} .
 
       
