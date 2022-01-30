@@ -1003,7 +1003,7 @@ stream {
         location = {{ $authPath }} {
             internal;
 
-            mosecurity off;
+            modsecurity off;
 
             {{ if (or $all.Cfg.EnableOpentracing $location.Opentracing.Enabled) }}
             opentracing on;
