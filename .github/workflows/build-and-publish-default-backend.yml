@@ -43,7 +43,7 @@ jobs:
 
       # Set commit sha as tag if event is push
       - name: Set comit sha as tag and include day so cron can not overwrite it
-        if: github.event_name != 'pull_request'
+        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
         id: date
         run: echo "::set-output name=date::$(date +'%Y-%m-%d')"        
 
