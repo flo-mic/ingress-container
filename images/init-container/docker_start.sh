@@ -54,7 +54,7 @@ if [[ "${AUTO_DECODING_PLUGIN_ENABLED}" = "true" ]]; then
     mv auto-decoding-plugin/plugins/* coreruleset/plugins/
 fi
 
-# Copy files to destination
+# Copy OWASP CRS to destination
 if [[ -d "/etc/nginx/owasp-modsecurity-crs/" ]]; then
     echo "Copy OWASP CRS to volume mount"
     cp -r coreruleset/* /etc/nginx/owasp-modsecurity-crs/
@@ -64,6 +64,12 @@ fi
 if [[ -d "/etc/nginx/template/" ]]; then
     echo "Copy nginx template file to volume mount"
     cp nginx.tmpl /etc/nginx/template/nginx.tmpl
+fi
+
+# Copy modsecurity config file
+if [[ -d "/etc/nginx/modsecurity/" ]]; then
+    echo "Copy modsecurity configuration file to volume mount"
+    cp modsecurity.conf /etc/nginx/modsecurity/modsecurity.conf
 fi
 
 # Build nginx configuration file

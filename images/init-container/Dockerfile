@@ -27,5 +27,6 @@ RUN apk update && \
 
 COPY docker_start.sh /docker_start.sh
 COPY nginx.tmpl nginx.tmpl
+COPY modsecurity.conf modsecurity.conf
 
 ENTRYPOINT [ "/docker_start.sh" ]
