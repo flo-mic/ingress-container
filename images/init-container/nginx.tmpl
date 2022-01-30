@@ -850,6 +850,7 @@ stream {
 
             proxy_set_header       X-Code             {{ $errCode }};
             proxy_set_header       X-Format           $http_accept;
+            proxy_set_header       X-Forwarded-For    $full_x_forwarded_for;;
             proxy_set_header       X-Original-URI     $request_uri;
             proxy_set_header       X-Namespace        $namespace;
             proxy_set_header       X-Ingress-Name     $ingress_name;
