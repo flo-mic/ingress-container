@@ -42,9 +42,9 @@ jobs:
         run: |
           if [[ "${{ github.event_name }}" = "schedule" ]] || [[ "${{ github.event_name }}" = "workflow_dispatch" ]]; then
             # Set tag with commit and time in case of cron or on demand run
-            echo "::set-output name=tag::$(${{ github.sha }}-$(date +'%Y-%m-%d'))"  
+            echo "::set-output name=tag::${{ github.sha }}-$(date +'%Y-%m-%d')"  
           else
-            echo "::set-output name=tag::$(${{ github.sha }})"
+            echo "::set-output name=tag::${{ github.sha }}"
           fi
       
       - name: Build image
