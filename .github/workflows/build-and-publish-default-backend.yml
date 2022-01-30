@@ -45,7 +45,7 @@ jobs:
       - name: Set comit sha as tag and include day so cron can not overwrite it
         if: github.event_name != 'pull_request'
         id: date
-        run: echo "::set-output name=date::$($(date +'%Y-%m-%d'))"        
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"        
 
       - name: Tag image
         if: github.event_name == 'push'
