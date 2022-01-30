@@ -25,9 +25,6 @@ formats:
           "original_uri": {{ original_uri | json }},
           "forwarded_for": {{ forwarded_for | json }},
           "namespace": {{ namespace | json }},
-          "ingress_name": {{ ingress_name | json }},
-          "service_name": {{ service_name | json }},
-          "service_port": {{ service_port | json }},
           "request_id": {{ request_id | json }},
           "timestamp": {{ now.Unix }}
         }{{ end }}
@@ -44,10 +41,6 @@ formats:
           <host>{{ host }}</host>
           <originalURI>{{ original_uri }}</originalURI>
           <forwardedFor>{{ forwarded_for }}</forwardedFor>
-          <namespace>{{ namespace }}</namespace>
-          <ingressName>{{ ingress_name }}</ingressName>
-          <serviceName>{{ service_name }}</serviceName>
-          <servicePort>{{ service_port }}</servicePort>
           <requestID>{{ request_id }}</requestID>
           <timestamp>{{ now.Unix }}</timestamp>
         </details>{{ end }}
