@@ -48,8 +48,11 @@ jobs:
         run: echo "::set-output name=date::$(date +'%Y-%m-%d')"        
 
       - name: Tag image
-        if: github.event_name == 'push'
+        if: github.event_name != 'pull_request'
         run: |
+          echo "${{ steps.date.outputs.date }}"
+          echo "${{ github.sha }}"
+
           docker tag ${{ github.sha }} ${IMAGE_NAME}:${VERSION}
           docker tag ${{ github.sha }} ${IMAGE_NAME}:${VERSION}-${{ github.sha }}
           docker tag ${{ github.sha }} ${REGISTRY}/${IMAGE_NAME}:${VERSION}
