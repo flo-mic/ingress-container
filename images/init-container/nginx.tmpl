@@ -623,7 +623,7 @@ http {
         {{ $cfg.ServerSnippet }}
         {{ end }}
 
-        {{ template "CUSTOM_ERRORS" (buildCustomErrorDeps "upstream-default-backend" $cfg.CustomHTTPErrors $all.EnableMetrics) }}
+        {{ template "CUSTOM_ERRORS" (buildCustomErrorDeps "upstream-default-backend" $cfg.CustomHTTPErrors $all.EnableMetrics $cfg.EnableModsecurity) }}
     }
     ## end server {{ $server.Hostname }}
 
@@ -839,12 +839,14 @@ stream {
 {{/* definition of templates to avoid repetitions */}}
 {{ define "CUSTOM_ERRORS" }}
         {{ $enableMetrics := .EnableMetrics }}
+        {{ $enableModsecurity := .EnableModsecurity }}
         {{ $upstreamName := .UpstreamName }}
         {{ range $errCode := .ErrorCodes }}
         location @custom_{{ $upstreamName }}_{{ $errCode }} {
             internal;
 
-            {{ if (shouldLoadModSecurityModule $cfg $servers) }}
+            # Ensure that modsecurity will not run on custom error pages or they might be blocked
+            {{ if ($enableModsecurity) }}
             modsecurity off;
             {{ end }}
 
@@ -979,7 +981,7 @@ stream {
         {{ end }}
 
         {{ range $errorLocation := (buildCustomErrorLocationsPerServer $server) }}
-        {{ template "CUSTOM_ERRORS" (buildCustomErrorDeps $errorLocation.UpstreamName $errorLocation.Codes $all.EnableMetrics) }}
+        {{ template "CUSTOM_ERRORS" (buildCustomErrorDeps $errorLocation.UpstreamName $errorLocation.Codes $all.EnableMetrics $cfg.EnableModsecurity) }}
         {{ end }}
 
         {{ buildMirrorLocations $server.Locations }}
@@ -1005,10 +1007,6 @@ stream {
         {{ if $authPath }}
         location = {{ $authPath }} {
             internal;
-
-            {{ if (shouldLoadModSecurityModule $cfg $servers) }}
-            modsecurity off;
-            {{ end }}
 
             {{ if (or $all.Cfg.EnableOpentracing $location.Opentracing.Enabled) }}
             opentracing on;
