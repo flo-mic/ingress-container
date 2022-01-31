@@ -616,14 +616,14 @@ http {
         }
         {{ end }}
 
-        {{ template "SERVER" serverConfig $all $server $cfg.EnableModsecurity }}
+        {{ template "SERVER" serverConfig $all $server }}
 
         {{ if not (empty $cfg.ServerSnippet) }}
         # Custom code snippet configured in the configuration configmap
         {{ $cfg.ServerSnippet }}
         {{ end }}
 
-        {{ template "CUSTOM_ERRORS" (buildCustomErrorDeps "upstream-default-backend" $cfg.CustomHTTPErrors $all.EnableMetrics $cfg.EnableModsecurity) }}
+        {{ template "CUSTOM_ERRORS" (buildCustomErrorDeps "upstream-default-backend" $cfg.CustomHTTPErrors $all.EnableMetrics) }}
     }
     ## end server {{ $server.Hostname }}
 
@@ -839,16 +839,12 @@ stream {
 {{/* definition of templates to avoid repetitions */}}
 {{ define "CUSTOM_ERRORS" }}
         {{ $enableMetrics := .EnableMetrics }}
-        {{ $enableModsecurity := .EnableModsecurity }}
         {{ $upstreamName := .UpstreamName }}
         {{ range $errCode := .ErrorCodes }}
         location @custom_{{ $upstreamName }}_{{ $errCode }} {
             internal;
 
-            # Ensure that modsecurity will not run on custom error pages or they might be blocked
-            {{ if ($enableModsecurity) }}
             modsecurity off;
-            {{ end }}
 
             proxy_intercept_errors off;
 
@@ -914,7 +910,6 @@ stream {
 {{ define "SERVER" }}
         {{ $all := .First }}
         {{ $server := .Second }}
-        {{ $enableModsecurityGlobal := .EnableModsecurity }}
 
         {{ buildHTTPListener  $all $server.Hostname }}
         {{ buildHTTPSListener $all $server.Hostname }}
@@ -982,7 +977,7 @@ stream {
         {{ end }}
 
         {{ range $errorLocation := (buildCustomErrorLocationsPerServer $server) }}
-        {{ template "CUSTOM_ERRORS" (buildCustomErrorDeps $errorLocation.UpstreamName $errorLocation.Codes $all.EnableMetrics $enableModsecurityGlobal) }}
+        {{ template "CUSTOM_ERRORS" (buildCustomErrorDeps $errorLocation.UpstreamName $errorLocation.Codes $all.EnableMetrics) }}
         {{ end }}
 
         {{ buildMirrorLocations $server.Locations }}
@@ -1008,6 +1003,8 @@ stream {
         {{ if $authPath }}
         location = {{ $authPath }} {
             internal;
+
+            modsecurity off;
 
             {{ if (or $all.Cfg.EnableOpentracing $location.Opentracing.Enabled) }}
             opentracing on;
