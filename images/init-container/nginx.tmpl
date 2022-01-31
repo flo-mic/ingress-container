@@ -844,7 +844,9 @@ stream {
         location @custom_{{ $upstreamName }}_{{ $errCode }} {
             internal;
 
+            {{ if (shouldLoadModSecurityModule $cfg $servers) }}
             modsecurity off;
+            {{ end }}
 
             proxy_intercept_errors off;
 
@@ -1004,7 +1006,9 @@ stream {
         location = {{ $authPath }} {
             internal;
 
+            {{ if (shouldLoadModSecurityModule $cfg $servers) }}
             modsecurity off;
+            {{ end }}
 
             {{ if (or $all.Cfg.EnableOpentracing $location.Opentracing.Enabled) }}
             opentracing on;
