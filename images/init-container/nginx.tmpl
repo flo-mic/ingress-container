@@ -616,7 +616,7 @@ http {
         }
         {{ end }}
 
-        {{ template "SERVER" serverConfig $all $server }}
+        {{ template "SERVER" serverConfig $all $server $cfg.EnableModsecurity }}
 
         {{ if not (empty $cfg.ServerSnippet) }}
         # Custom code snippet configured in the configuration configmap
@@ -914,6 +914,7 @@ stream {
 {{ define "SERVER" }}
         {{ $all := .First }}
         {{ $server := .Second }}
+        {{ $enableModsecurityGlobal := .EnableModsecurity }}
 
         {{ buildHTTPListener  $all $server.Hostname }}
         {{ buildHTTPSListener $all $server.Hostname }}
@@ -981,7 +982,7 @@ stream {
         {{ end }}
 
         {{ range $errorLocation := (buildCustomErrorLocationsPerServer $server) }}
-        {{ template "CUSTOM_ERRORS" (buildCustomErrorDeps $errorLocation.UpstreamName $errorLocation.Codes $all.EnableMetrics $cfg.EnableModsecurity) }}
+        {{ template "CUSTOM_ERRORS" (buildCustomErrorDeps $errorLocation.UpstreamName $errorLocation.Codes $all.EnableMetrics $enableModsecurityGlobal) }}
         {{ end }}
 
         {{ buildMirrorLocations $server.Locations }}
