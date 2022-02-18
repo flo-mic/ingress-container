@@ -77,7 +77,8 @@ fi
 if [[ -d "/etc/nginx/owasp-modsecurity-crs/" ]]; then
     echo "Create nginx-modsecurity configuration file"
 
-    echo "Include /etc/nginx/owasp-modsecurity-crs/crs-setup.conf" > /etc/nginx/owasp-modsecurity-crs/nginx-modsecurity.conf
+    echo "Include /etc/nginx/modsecurity/modsecurity.conf" > /etc/nginx/owasp-modsecurity-crs/nginx-modsecurity.conf
+    echo "Include /etc/nginx/owasp-modsecurity-crs/crs-setup.conf" >> /etc/nginx/owasp-modsecurity-crs/nginx-modsecurity.conf
     # Add plugin conf files if present
     for line in $(find /etc/nginx/owasp-modsecurity-crs/plugins -name '*-config.conf' | sort); do 
         echo "Include $line" >> /etc/nginx/owasp-modsecurity-crs/nginx-modsecurity.conf
