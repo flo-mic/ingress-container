@@ -77,9 +77,6 @@ fi
 if [[ -d "/etc/nginx/owasp-modsecurity-crs/" ]]; then
     echo "Create nginx-modsecurity configuration file"
 
-    # Add modsec conf file to loading directive
-    echo "Include /etc/nginx/modsecurity/modsecurity.conf" > /etc/nginx/owasp-modsecurity-crs/nginx-modsecurity.conf
-    
     # Define default SecRuleAction
     if [[ -n "${SEC_RULE_ENGINE}" ]]; then
         echo "SecRuleEngine ${SEC_RULE_ENGINE}" >> /etc/nginx/owasp-modsecurity-crs/nginx-modsecurity.conf
