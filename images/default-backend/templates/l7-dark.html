@@ -74,22 +74,22 @@
         {{ if show_details }}
         <div class="details">
             <table>
-                {{- if host }}<tr>
+                <tr>
                     <td class="name">Host</td>
-                    <td class="value">{{ host }}</td>
-                </tr>{{ end -}}
-                {{- if original_uri }}<tr>
+                    <td class="value">{{ host | json }}</td>
+                </tr>
+                <tr>
                     <td class="name">Original URI</td>
                     <td class="value">{{ original_uri }}</td>
-                </tr>{{ end -}}
-                {{- if forwarded_for }}<tr>
+                </tr>
+                <tr>
                     <td class="name">Forwarded for</td>
                     <td class="value">{{ forwarded_for }}</td>
-                </tr>{{ end -}}            
-                {{- if request_id }}<tr>
+                </tr>         
+                <tr>
                     <td class="name">Request ID</td>
                     <td class="value">{{ request_id }}</td>
-                </tr>{{ end -}}
+                </tr>
                 <tr>
                     <td class="name">Timestamp</td>
                     <td class="value">{{ now.Unix }}</td>
