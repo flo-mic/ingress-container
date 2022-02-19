@@ -1,6 +1,6 @@
 templates:
+  - path: ./templates/l7-light.html
   - path: ./templates/l7-dark.html
-
 
 formats:
   json:
