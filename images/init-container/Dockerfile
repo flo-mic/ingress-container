@@ -11,7 +11,6 @@ RUN apk update && \
     git clone -b ${OWASP_VERSION} --depth 1 --quiet https://github.com/coreruleset/coreruleset && \
     mv coreruleset/crs-setup.conf.example coreruleset/crs-setup.conf && \
     git clone https://github.com/coreruleset/antivirus-plugin && \
-    mv antivirus-plugin/plugins/antivirus-config.conf.example antivirus-plugin/plugins/antivirus-config.conf && \
     git clone https://github.com/coreruleset/fake-bot-plugin && \
     git clone https://github.com/coreruleset/incubator-plugin && \
     git clone https://github.com/coreruleset/body-decompress-plugin && \
