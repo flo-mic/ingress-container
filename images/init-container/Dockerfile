@@ -15,6 +15,7 @@ RUN apk update && \
     git clone https://github.com/coreruleset/incubator-plugin && \
     git clone https://github.com/coreruleset/body-decompress-plugin && \
     git clone https://github.com/coreruleset/auto-decoding-plugin && \
+    git clone https://github.com/coreruleset/nextcloud-rule-exclusions-plugin && \
     # Start cleanup
     apk del --purge build-dependencies && \
     rm -rf \

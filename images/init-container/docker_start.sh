@@ -3,6 +3,16 @@
 # Configure antivirus plugin
 if [[ "${CLAMAV_PLUGIN_ENABLED}" = "true" ]] && [[ -n "${CLAMAV_ADDRESS}" ]]; then
     echo "Configure Antivirus Plugin for OWASP CRS"
+    # Disable the plugin globally so it can be loaded in individual server locations only
+    if [[ "${CLAMAV_ACTIVATE_GLOBALLY}" = "false" ]]; then
+        echo "\n# Disabling plugin globally (can still be enabled on ingress objects by setting the variable back to 1)
+SecRule &TX:antivirus-plugin_enabled \"@eq 0\" \\
+   \"id:9502010,\\
+    phase:1,\\
+    pass,\\
+    nolog,\\
+    setvar:'tx.antivirus-plugin_enabled=0'\"" >> antivirus-plugin/plugins/antivirus-config.conf 
+    fi
     sed -i "s/plugin_clamav_connect_type=.*'/plugin_clamav_connect_type=tcp'/g" antivirus-plugin/plugins/antivirus-config.conf
     sed -i "s/plugin_clamav_address=.*'/plugin_clamav_address=${CLAMAV_ADDRESS}'/g" antivirus-plugin/plugins/antivirus-config.conf
     if [[ -n "${CLAMAV_PORT}" ]]; then
@@ -26,18 +36,48 @@ fi
 # Configure fakebot google plugin
 if [[ "${FAKEBOT_PLUGIN_ENABLED}" = "true" ]]; then
     echo "Configure Fakebot Plugin for OWASP CRS"
+    # Disable the plugin globally so it can be loaded in individual server locations only
+    if [[ "${FAKEBOT_ACTIVATE_GLOBALLY}" = "false" ]]; then
+        echo "\n# Disabling plugin globally (can still be enabled on ingress objects by setting the variable back to 1)
+SecRule &TX:fake-bot-plugin_enabled \"@eq 0\" \\
+   \"id:9504010,\\
+    phase:1,\\
+    pass,\\
+    nolog,\\
+    setvar:'tx.fake-bot-plugin_enabled=0'\"" >> fake-bot-plugin/plugins/fake-bot-config.conf
+    fi
     mv fake-bot-plugin/plugins/* coreruleset/plugins/
 fi
 
 # Configure Incubator plugin
 if [[ "${INCUBATOR_PLUGIN_ENABLED}" = "true" ]]; then
     echo "Configure Incubator Plugin for OWASP CRS"
+    # Disable the plugin globally so it can be loaded in individual server locations only
+    if [[ "${INCUBATOR_ACTIVATE_GLOBALLY}" = "false" ]]; then
+        echo "\n# Disabling plugin globally (can still be enabled on ingress objects by setting the variable back to 1)
+SecRule &TX:incubator-plugin_enabled \"@eq 0\" \\
+   \"id:9900010,\\
+    phase:1,\\
+    pass,\\
+    nolog,\\
+    setvar:'tx.incubator-plugin_enabled=0'\"" >> incubator-plugin/plugins/incubator-config.conf 
+    fi
     mv incubator-plugin/plugins/* coreruleset/plugins/
 fi
 
 # Configure body-decompress plugin
 if [[ "${BODY_DECOMPRESS_PLUGIN_ENABLED}" = "true" ]]; then
     echo "Configure body-decompress Plugin for OWASP CRS"
+    # Disable the plugin globally so it can be loaded in individual server locations only
+    if [[ "${BODY_DECOMPRESS_ACTIVATE_GLOBALLY}" = "false" ]]; then
+        echo "\n# Disabling plugin globally (can still be enabled on ingress objects by setting the variable back to 1)
+SecRule &TX:body-decompress-plugin_enabled \"@eq 0\" \\
+   \"id:9503010,\\
+    phase:1,\\
+    pass,\\
+    nolog,\\
+    setvar:'tx.body-decompress-plugin_enabled=0'\"" >> body-decompress-plugin/plugins/body-decompress-config.conf 
+    fi
     if [[ -n "${BODY_DECOMPRESS_MAX_DATA_SIZE}" ]]; then
         sed -i "s/plugin_max_data_size_bytes=.*'/plugin_max_data_size_bytes=${CLAMAV_MAX_DATA_SIZE}'/g" body-decompress-plugin/plugins/body-decompress-config.conf
     fi
@@ -52,6 +92,22 @@ if [[ "${AUTO_DECODING_PLUGIN_ENABLED}" = "true" ]]; then
         sed -i "s/#    /    /g" auto-decoding-plugin/plugins/generic-transformations-config-before.conf
     fi
     mv auto-decoding-plugin/plugins/* coreruleset/plugins/
+fi
+
+# Configure nextcloud-rule-exclusions-plugin
+if [[ "${NEXTCLOUD_PLUGIN_ENABLED}" = "true" ]]; then
+    echo "Configure nextcloud rule exclusion Plugin for OWASP CRS"
+    # Disable the plugin globally so it can be loaded in individual server locations only
+    if [[ "${NEXTCLOUD_ACTIVATE_GLOBALLY}" = "false" ]]; then
+        echo "\n# Disabling plugin globally (can still be enabled on ingress objects by setting the variable back to 1)
+SecRule &TX:nextcloud-rule-exclusions-plugin_enabled \"@eq 0\" \\
+   \"id:9508010,\\
+    phase:1,\\
+    pass,\\
+    nolog,\\
+    setvar:'tx.nextcloud-rule-exclusions-plugin_enabled=0'\"" >> nextcloud-rule-exclusions-plugin/plugins/nextcloud-rule-exclusions-config.conf 
+    fi
+    mv nextcloud-rule-exclusions-plugin/plugins/* coreruleset/plugins/
 fi
 
 # Copy OWASP CRS to destination
