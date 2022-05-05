@@ -21,7 +21,7 @@ on:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}-init
-  VERSION: "v1.1"
+  VERSION: "v1.2"
   WORKDIR: "images/init-container"
   
 jobs:

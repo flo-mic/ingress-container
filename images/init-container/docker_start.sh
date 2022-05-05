@@ -5,7 +5,7 @@ if [[ "${CLAMAV_PLUGIN_ENABLED}" = "true" ]] && [[ -n "${CLAMAV_ADDRESS}" ]]; th
     echo "Configure Antivirus Plugin for OWASP CRS"
     # Disable the plugin globally so it can be loaded in individual server locations only
     if [[ "${CLAMAV_ACTIVATE_GLOBALLY}" = "false" ]]; then
-        echo "\n# Disabling plugin globally (can still be enabled on ingress objects by setting the variable back to 1)
+        echo "# Disabling plugin globally (can still be enabled on ingress objects by setting the variable back to 1)
 SecRule &TX:antivirus-plugin_enabled \"@eq 0\" \\
    \"id:9502010,\\
     phase:1,\\
@@ -38,7 +38,7 @@ if [[ "${FAKEBOT_PLUGIN_ENABLED}" = "true" ]]; then
     echo "Configure Fakebot Plugin for OWASP CRS"
     # Disable the plugin globally so it can be loaded in individual server locations only
     if [[ "${FAKEBOT_ACTIVATE_GLOBALLY}" = "false" ]]; then
-        echo "\n# Disabling plugin globally (can still be enabled on ingress objects by setting the variable back to 1)
+        echo "# Disabling plugin globally (can still be enabled on ingress objects by setting the variable back to 1)
 SecRule &TX:fake-bot-plugin_enabled \"@eq 0\" \\
    \"id:9504010,\\
     phase:1,\\
@@ -54,7 +54,7 @@ if [[ "${INCUBATOR_PLUGIN_ENABLED}" = "true" ]]; then
     echo "Configure Incubator Plugin for OWASP CRS"
     # Disable the plugin globally so it can be loaded in individual server locations only
     if [[ "${INCUBATOR_ACTIVATE_GLOBALLY}" = "false" ]]; then
-        echo "\n# Disabling plugin globally (can still be enabled on ingress objects by setting the variable back to 1)
+        echo "# Disabling plugin globally (can still be enabled on ingress objects by setting the variable back to 1)
 SecRule &TX:incubator-plugin_enabled \"@eq 0\" \\
    \"id:9900010,\\
     phase:1,\\
@@ -70,7 +70,7 @@ if [[ "${BODY_DECOMPRESS_PLUGIN_ENABLED}" = "true" ]]; then
     echo "Configure body-decompress Plugin for OWASP CRS"
     # Disable the plugin globally so it can be loaded in individual server locations only
     if [[ "${BODY_DECOMPRESS_ACTIVATE_GLOBALLY}" = "false" ]]; then
-        echo "\n# Disabling plugin globally (can still be enabled on ingress objects by setting the variable back to 1)
+        echo "# Disabling plugin globally (can still be enabled on ingress objects by setting the variable back to 1)
 SecRule &TX:body-decompress-plugin_enabled \"@eq 0\" \\
    \"id:9503010,\\
     phase:1,\\
@@ -99,7 +99,7 @@ if [[ "${NEXTCLOUD_PLUGIN_ENABLED}" = "true" ]]; then
     echo "Configure nextcloud rule exclusion Plugin for OWASP CRS"
     # Disable the plugin globally so it can be loaded in individual server locations only
     if [[ "${NEXTCLOUD_ACTIVATE_GLOBALLY}" = "false" ]]; then
-        echo "\n# Disabling plugin globally (can still be enabled on ingress objects by setting the variable back to 1)
+        echo "# Disabling plugin globally (can still be enabled on ingress objects by setting the variable back to 1)
 SecRule &TX:nextcloud-rule-exclusions-plugin_enabled \"@eq 0\" \\
    \"id:9508010,\\
     phase:1,\\
@@ -108,6 +108,25 @@ SecRule &TX:nextcloud-rule-exclusions-plugin_enabled \"@eq 0\" \\
     setvar:'tx.nextcloud-rule-exclusions-plugin_enabled=0'\"" >> nextcloud-rule-exclusions-plugin/plugins/nextcloud-rule-exclusions-config.conf 
     fi
     mv nextcloud-rule-exclusions-plugin/plugins/* coreruleset/plugins/
+fi
+
+# Configure pgadmin-rule-exclusions-plugin
+if [[ "${PGADMIN_PLUGIN_ENABLED}" = "true" ]]; then
+    echo "Configure pgadmin rule exclusion Plugin for OWASP CRS"
+    # Disable the plugin globally so it can be loaded in individual server locations only
+    if [[ "${PGADMIN_ACTIVATE_GLOBALLY}" = "false" ]]; then
+        echo "# Disabling plugin globally (can still be enabled on ingress objects by setting the variable back to 1)
+SecRule &TX:pgadmin-rule-exclusions-plugin_enabled \"@eq 0\" \\
+   \"id:9516010,\\
+    phase:1,\\
+    pass,\\
+    nolog,\\
+    setvar:'tx.pgadmin-rule-exclusions-plugin_enabled=0'\"" >> pgadmin-rule-exclusions-plugin/plugins/pgadmin-rule-exclusions-config.conf
+    fi
+    if [[ -n "${PGADMIN_SESSION_COOKIE_NAME}" ]]; then
+        sed -i "s/pga4_session/${PGADMIN_SESSION_COOKIE_NAME}/g" pgadmin-rule-exclusions-plugin/plugins/pgadmin-rule-exclusions-config.conf
+    fi
+    mv pgadmin-rule-exclusions-plugin/plugins/* coreruleset/plugins/
 fi
 
 # Copy OWASP CRS to destination
